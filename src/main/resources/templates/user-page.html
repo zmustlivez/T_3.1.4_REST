@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>T_2.3.1</title>
+    <style>
+        table {
+            width: 50%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+        th, td {
+            width: 33%;
+        }
+    </style>
+</head>
+
+<body>
+<table>
+    <thead>
+    <tr>
+        <th>Username</th>
+        <th>Password</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    <td th:text="${user.getUsername()}">username</td>
+    <td th:text="${user.getPassword()}">password</td>
+
+
+    </td>
+    </tr>
+
+    </tbody>
+</table>
+<form th:method="post" th:action="@{/users/update}" th:object="${user}">
+
+    <input type="hidden" name="username" th:field="${user.username}"/>
+    <input type="text" id="password" name="password" placeholder="Enter NEW password"/>
+    </div>
+    <button type="submit">Setup new password</button>
+    <p><a th:href="@{/users}">Перейти к таблице с пользователями</a></p>
+</form>
+
+</body>
+
+</html>

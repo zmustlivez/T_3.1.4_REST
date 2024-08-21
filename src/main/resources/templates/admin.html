@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Table</title>
+    <style>
+        table {
+            width: 50%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+        th, td {
+            width: 33%;
+        }
+    </style>
+</head>
+<body>
+<h1>List of Users</h1>
+<form th:action="@{/users/add}" method="get">
+    <button type="submit">User add</button>
+</form>
+
+<form th:action="@{/users/find}" method="get">
+    <input type="text" name="username" placeholder="Enter username"/>
+    <button type="submit">Search</button>
+</form>
+<table>
+    <thead>
+    <tr>
+        <th>Username</th>
+        <th>Delete</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${usersList}">
+        <td><a id="user" th:href="@{/users/getInfo(name=${user.getUsername()})}" th:text="${user.getUsername()}"></a>
+        </td>
+        <td><a id="deleteUser" th:href="@{/users/delete(name=${user.getUsername()})}" th:text="'delete'"
+               onclick="return confirm('Are you sure you want to delete this user?')"></a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>T_2.3.1</title>
+</head>
+
+<body>
+<form th:action="@{/users/save}" method="post" th:object="${user}">
+    <label for="username">Please write "username"</label>
+    <input id="username" type="text" th:field="*{username}" placeholder="Enter username"/>
+
+    <label for="password">Please write "password"</label>
+    <input id="password" type="text" th:field="*{password}" placeholder="Enter password"/>
+
+    <input type="submit" value="Add"/>
+
+    <div th:if="${errorMessage}">
+        <p th:text="${errorMessage}" style="color: red;"></p>
+    </div>
+    <p><a th:href="@{/users}">Перейти к таблице с пользователями</a></p>
+</form>
+</body>
+</html>

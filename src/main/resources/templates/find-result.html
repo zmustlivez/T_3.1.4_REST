@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Result</title>
+    <style>
+        table {
+            width: 50%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+<h1>Search Result</h1>
+
+<div th:if="${user}">
+    <table>
+        <tr>
+            <th>Username</th>
+            <td th:text="${user.getUsername()}"></td>
+        </tr>
+        <tr>
+            <th>Password</th>
+            <td th:text="${user.getPassword()}"></td>
+        </tr>
+    </table>
+</div>
+
+<a th:href="@{/users}" class="button">Back to Users List</a>
+
+
+</body>
+</html>
