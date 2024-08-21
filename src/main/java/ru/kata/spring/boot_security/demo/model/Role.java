@@ -37,11 +37,11 @@ public class Role {
         this.id = id;
     }
 
-    public String getRoleName() {
+    public String getRolename() {
         return rolename;
     }
 
-    public void setRoleName(Roles roleName) {
+    public void setRolename(String rolename) {
         this.rolename = rolename;
     }
 

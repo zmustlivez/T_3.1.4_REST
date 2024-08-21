@@ -8,8 +8,10 @@
 
 <body>
 <p>"User not found (Пользователь не найден)"</p>
-<p><a th:href="@{/users}">Перейти к таблице с пользователями</a></p>
-
+<p><a th:href="@{/admin}">Перейти к таблице с пользователями</a></p>
+<form th:action="@{/logout}" method="post">
+    <button type="submit">Logout</button>
+</form>
 </body>
 
 </html>

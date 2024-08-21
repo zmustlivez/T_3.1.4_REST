@@ -12,6 +12,6 @@ public class RoleSecurity implements GrantedAuthority {
 
     @Override
     public String getAuthority() {
-        return role.getRoleName();
+        return role.getRolename();
     }
 }

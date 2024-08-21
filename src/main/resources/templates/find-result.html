@@ -34,8 +34,10 @@
     </table>
 </div>
 
-<a th:href="@{/users}" class="button">Back to Users List</a>
-
+<a th:href="@{/admin}" class="button">Back to Users List</a>
+<form th:action="@{/logout}" method="post">
+    <button type="submit">Logout</button>
+</form>
 
 </body>
 </html>

@@ -47,15 +47,18 @@
 
     </tbody>
 </table>
-<form th:method="post" th:action="@{/users/update}" th:object="${user}">
+<form th:if="${highLev}" th:method="post" th:action="@{/admin/update}" th:object="${user}">
 
     <input type="hidden" name="username" th:field="${user.username}"/>
     <input type="text" id="password" name="password" placeholder="Enter NEW password"/>
     </div>
-    <button type="submit">Setup new password</button>
-    <p><a th:href="@{/users}">Перейти к таблице с пользователями</a></p>
-</form>
+    <button type="submit" >Setup new password</button>
+    <p><a th:href="@{/admin}">Перейти к таблице с пользователями</a></p>
 
+</form>
+<form th:action="@{/logout}" method="post">
+    <button type="submit">Logout</button>
+</form>
 </body>
 
 </html>
