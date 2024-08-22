@@ -29,18 +29,5 @@ public class SuccessUserHandler implements AuthenticationSuccessHandler {
         } else {
             httpServletResponse.sendRedirect("/");
         }
-
-//TODO Проверить замену кода if else на stream
-/*        Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
-
-        String redirectUrl = ROLE_TO_URL_MAP.entrySet().stream()
-                .filter(entry -> roles.contains(entry.getKey()))
-                .map(Map.Entry::getValue)
-                .findFirst()
-                .orElse("/");
-
-        httpServletResponse.sendRedirect(redirectUrl);
-        */
-
     }
 }

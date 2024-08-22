@@ -28,13 +28,6 @@ public class AdminController {
     public String redirectToLogin() {
         return "redirect:/login";
     }
- /*   @GetMapping("/admin")
-    @PreAuthorize("hasRole('ADMIN')")
-    public String adminPage(Model model) {
-        // Логика для администраторов
-        model.addAttribute("adminData", "Данные для администратора");
-        return "admin";
-    }*/
 
     @GetMapping("/user")
     @PreAuthorize("hasRole('USER')")
@@ -42,7 +35,6 @@ public class AdminController {
         // Логика для пользователей
 
         model.addAttribute("user", userService.loadUserByUsername(principal.getName()));
-//        model.addAttribute("userData", "Данные для пользователя");
         return "user-page";
     }
 
@@ -56,13 +48,11 @@ public class AdminController {
         return "admin";
     }
 
-
     @GetMapping("/admin/add")
     public String showAddUserForm(@ModelAttribute("user") User user, Model model) {
-        model.addAttribute("rolesList",roleRepository.findAll() );
+        model.addAttribute("rolesList", roleRepository.findAll());
         return "save-user-form";
     }
-
 
     @PostMapping("/admin/save")
     public String addUser(@ModelAttribute("user") User user, RedirectAttributes redirectAttributes) {
@@ -95,11 +85,9 @@ public class AdminController {
     @GetMapping("/admin/getInfo")
     public String getUserByName(@RequestParam("name") String name, Model model) {
         model.addAttribute("user", userService.loadUserByUsername(name));
-        model.addAttribute("highLev",true);
+        model.addAttribute("highLev", true);
         return "user-page";
     }
-
-
 
     @PostMapping("/admin/update")
     public String updateUser(@RequestParam("password") String password, @ModelAttribute("user") User user) {
@@ -118,5 +106,4 @@ public class AdminController {
         userService.deleteUser(name);
         return "redirect:/admin";
     }
-
 }

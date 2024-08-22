@@ -34,15 +34,13 @@ public class UserCreator {
             adminRole = existingRole;
         }
 
-        // Убедитесь, что роль не null перед созданием пользователя
         Role role = adminRole.orElse(null);
         User admin = new User(
                 "admin",
                 "admin123A",
                 "Creator",
                 role);
-        if (!userService.getUsers().contains(admin)) {//||!userService.getUsers().contains(user)) {
-//            userService.addUser(user);
+        if (!userService.getUsers().contains(admin)) {
             userService.addUser(admin);
         }
     }

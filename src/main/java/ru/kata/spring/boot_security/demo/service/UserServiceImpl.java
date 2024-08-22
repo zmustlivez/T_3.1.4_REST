@@ -13,16 +13,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserServiceImpl implements UserService{//, UserDetailsService {
-/*    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> user = userDAO.findByUsername(username);
-        if (user.isEmpty()) {
-            throw new UsernameNotFoundException("Username "+ username+ " not found");
-        }
-        return null;
-    }*/
-private final PasswordEncoder passwordEncoder;
+public class UserServiceImpl implements UserService {//, UserDetailsService {
+    private final PasswordEncoder passwordEncoder;
     private final UserDAO userDAO;
 
     public UserServiceImpl(PasswordEncoder passwordEncoder, UserDAO userDAO) {

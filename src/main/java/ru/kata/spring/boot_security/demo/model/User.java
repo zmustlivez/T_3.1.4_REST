@@ -28,10 +28,7 @@ public class User { //implements UserDetails {
     private String nameowner;
 
 
-    @ManyToMany(fetch = FetchType.EAGER)//, cascade = CascadeType.ALL)
-/*    @JoinTable(name = "users_roles",
-            joinColumns = @JoinColumn(name = "user_username"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))*/
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 
     private List<Role> roles=new ArrayList<>();
 

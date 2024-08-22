@@ -32,8 +32,7 @@ public class UserDAOImpl implements UserDAO {
         try {
             return entityManager.createQuery("from User where username=:name", User.class).setParameter("name", name).getSingleResult();
         } catch (NoResultException e) {
-            //throw new UsernameNotFoundException("Username not found");
-        return null;
+            return null;
         }
     }
 
