@@ -13,12 +13,7 @@ import java.util.Set;
 
 @Component
 public class SuccessUserHandler implements AuthenticationSuccessHandler {
-    private static final Map<String, String> ROLE_TO_URL_MAP = Map.of(
-            "ROLE_USER", "/user",
-            "ROLE_ADMIN", "/admin"
-    );
 
-    // Spring Security использует объект Authentication, пользователя авторизованной сессии.
     @Override
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException {
         Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());

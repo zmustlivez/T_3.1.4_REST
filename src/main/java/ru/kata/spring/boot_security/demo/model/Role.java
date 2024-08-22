@@ -1,10 +1,7 @@
 package ru.kata.spring.boot_security.demo.model;
 
-import org.springframework.security.core.GrantedAuthority;
-import ru.kata.spring.boot_security.demo.users.Roles;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -19,7 +16,6 @@ public class Role {
     @Column(name = "rolename", unique = true)
     private String rolename;
 
-//    @Transient
     @ManyToMany(mappedBy = "roles")
     private List<User> users;
 

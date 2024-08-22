@@ -1,7 +1,6 @@
 package ru.kata.spring.boot_security.demo.controller;
 
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import ru.kata.spring.boot_security.demo.repository.RoleRepository;
 import ru.kata.spring.boot_security.demo.service.UserService;
 import ru.kata.spring.boot_security.demo.model.User;
@@ -17,7 +16,7 @@ import java.security.Principal;
 @RequestMapping("/")
 public class AdminController {
     private final UserService userService;
-    private RoleRepository roleRepository;
+    private final RoleRepository roleRepository;
 
     public AdminController(UserService userService, RoleRepository roleRepository) {
         this.userService = userService;

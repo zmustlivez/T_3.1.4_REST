@@ -1,22 +1,15 @@
 package ru.kata.spring.boot_security.demo.model;
 
 
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.Fetch;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
-import static org.hibernate.annotations.CascadeType.*;
 
 @Entity
 @Table(name = "users")
-public class User { //implements UserDetails {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -30,7 +23,7 @@ public class User { //implements UserDetails {
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 
-    private List<Role> roles=new ArrayList<>();
+    private List<Role> roles = new ArrayList<>();
 
     public User() {
     }

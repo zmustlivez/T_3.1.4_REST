@@ -1,23 +1,19 @@
 package ru.kata.spring.boot_security.demo.users;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repository.RoleRepository;
-import ru.kata.spring.boot_security.demo.repository.UserRepository;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 import javax.annotation.PostConstruct;
-import java.util.List;
 import java.util.Optional;
 
 @Component
 public class UserCreator {
     private final RoleRepository roleRepository;
-    private UserService userService;
+    private final UserService userService;
     private Optional<Role> adminRole;
-    Role userRole;
 
     public UserCreator(RoleRepository roleRepository, UserService userService) {
         this.roleRepository = roleRepository;
