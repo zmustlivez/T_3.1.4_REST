@@ -21,7 +21,7 @@ public class User {
     private String nameowner;
 
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 
     private List<Role> roles = new ArrayList<>();
 

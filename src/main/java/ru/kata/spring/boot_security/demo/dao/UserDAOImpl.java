@@ -1,5 +1,6 @@
 package ru.kata.spring.boot_security.demo.dao;
 
+import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.model.User;
 
 import org.springframework.stereotype.Repository;
@@ -10,7 +11,8 @@ import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Repository
-public class UserDAOImpl implements UserDAO {
+@Transactional
+public class UserDAOImpl implements UserDAO<User> {
     @PersistenceContext
     private EntityManager entityManager;
 

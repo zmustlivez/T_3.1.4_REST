@@ -3,13 +3,15 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>T_2.3.1</title>
+    <title>T_2.3.1 Start page</title>
 </head>
 
 <body>
 
-<p><a th:href="@{/admin}">Перейти к таблице с пользователями</a></p>
-
+<!--<p><a th:href="@{/admin}">Перейти к таблице с пользователями</a></p>-->
+<form th:action="@{/admin}" method="get">
+    <button type="submit">Перейти к таблице с пользователями</button>
+</form>
 </body>
 
 </html>

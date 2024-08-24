@@ -1,5 +1,6 @@
 package ru.kata.spring.boot_security.demo.users;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
@@ -15,7 +16,7 @@ public class UserCreator {
     private final UserService userService;
     private Optional<Role> adminRole;
 
-    public UserCreator(RoleRepository roleRepository, UserService userService) {
+    public UserCreator(RoleRepository roleRepository, @Qualifier("userServiceImplRepo")UserService userService) {
         this.roleRepository = roleRepository;
         this.userService = userService;
     }
@@ -36,9 +37,10 @@ public class UserCreator {
                 "admin123A",
                 "Creator",
                 role);
-        if (!userService.getUsers().contains(admin)) {
+/*        if (!userService.getUsers().contains(admin)) {
             userService.addUser(admin);
-        }
+        }*/
+        userService.addUser(admin);
     }
 
 }

@@ -1,43 +1,26 @@
 package ru.kata.spring.boot_security.demo.controller;
 
-import org.springframework.security.access.prepost.PreAuthorize;
-import ru.kata.spring.boot_security.demo.repository.RoleRepository;
-import ru.kata.spring.boot_security.demo.service.UserService;
-import ru.kata.spring.boot_security.demo.model.User;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.security.Principal;
-
+import ru.kata.spring.boot_security.demo.model.User;
+import ru.kata.spring.boot_security.demo.repository.RoleRepository;
+import ru.kata.spring.boot_security.demo.service.UserService;
 
 @Controller
-@RequestMapping("/")
+@RequestMapping("/admin")
 public class AdminController {
     private final UserService userService;
     private final RoleRepository roleRepository;
 
-    public AdminController(UserService userService, RoleRepository roleRepository) {
+public AdminController(@Qualifier ("userServiceImplRepo") UserService userService, RoleRepository roleRepository) {
         this.userService = userService;
         this.roleRepository = roleRepository;
     }
 
-    @GetMapping("/")
-    public String redirectToLogin() {
-        return "redirect:/login";
-    }
-
-    @GetMapping("/user")
-    @PreAuthorize("hasRole('USER')")
-    public String userPage(Model model, Principal principal) {
-        // Логика для пользователей
-
-        model.addAttribute("user", userService.loadUserByUsername(principal.getName()));
-        return "user-page";
-    }
-
-    @GetMapping("/admin")
+    @GetMapping
     public String getUsers(Model model) {
         model.addAttribute("usersList", userService.getUsers());
         if (model.containsAttribute("searchedUser")) {
@@ -47,13 +30,13 @@ public class AdminController {
         return "admin";
     }
 
-    @GetMapping("/admin/add")
+    @GetMapping("/add")
     public String showAddUserForm(@ModelAttribute("user") User user, Model model) {
         model.addAttribute("rolesList", roleRepository.findAll());
         return "save-user-form";
     }
 
-    @PostMapping("/admin/save")
+    @PostMapping("/save")
     public String addUser(@ModelAttribute("user") User user, RedirectAttributes redirectAttributes) {
         boolean userAdded = userService.addUser(user);
         if (userAdded) {
@@ -64,7 +47,7 @@ public class AdminController {
         }
     }
 
-    @GetMapping("/admin/find")
+    @GetMapping("/find")
     public String searchUser(@RequestParam("username") String name, Model model) {
         if (name != null && !name.isEmpty()) {
             User user;
@@ -76,19 +59,19 @@ public class AdminController {
         return "user-not-found";
     }
 
-    @GetMapping("/admin/user-not-found")
+    @GetMapping("/user-not-found")
     public String showUserNotFound() {
         return "user-not-found";
     }
 
-    @GetMapping("/admin/getInfo")
+    @GetMapping("/getInfo")
     public String getUserByName(@RequestParam("name") String name, Model model) {
         model.addAttribute("user", userService.loadUserByUsername(name));
         model.addAttribute("highLev", true);
         return "user-page";
     }
 
-    @PostMapping("/admin/update")
+    @PostMapping("/update")
     public String updateUser(@RequestParam("password") String password, @ModelAttribute("user") User user) {
         if (user != null) {
             User existingUser = userService.loadUserByUsername(user.getUsername());
@@ -100,7 +83,7 @@ public class AdminController {
         }
     }
 
-    @GetMapping("/admin/delete")
+    @GetMapping("/delete")
     public String deleteUser(@RequestParam("name") String name) {
         userService.deleteUser(name);
         return "redirect:/admin";
