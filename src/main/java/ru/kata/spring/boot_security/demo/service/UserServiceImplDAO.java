@@ -13,7 +13,7 @@ public class UserServiceImplDAO implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserDAO<User> userDAO;
 
-    public UserServiceImplDAO(PasswordEncoder passwordEncoder, UserDAO userDAO) {
+public UserServiceImplDAO(PasswordEncoder passwordEncoder, UserDAO<User> userDAO) {
         this.passwordEncoder = passwordEncoder;
         this.userDAO = userDAO;
     }
@@ -33,6 +33,7 @@ public class UserServiceImplDAO implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<User> getUsers() {
         return userDAO.getUsers();
 
@@ -46,6 +47,7 @@ public class UserServiceImplDAO implements UserService {
     }
 
     @Override
+    @Transactional
     public void deleteUser(String name) {
         userDAO.deleteUser(loadUserByUsername(name));
 

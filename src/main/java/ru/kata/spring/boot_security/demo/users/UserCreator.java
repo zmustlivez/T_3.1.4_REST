@@ -14,7 +14,6 @@ import java.util.Optional;
 public class UserCreator {
     private final RoleRepository roleRepository;
     private final UserService userService;
-    private Optional<Role> adminRole;
 
     public UserCreator(RoleRepository roleRepository, @Qualifier("userServiceImplRepo")UserService userService) {
         this.roleRepository = roleRepository;
@@ -25,6 +24,7 @@ public class UserCreator {
     private void postConstruct() {
         Optional<Role> existingRole = roleRepository.findByRolename(Roles.ADMIN.getDescription());
 
+        Optional<Role> adminRole;
         if (existingRole.isEmpty()) {
             adminRole = Optional.of(roleRepository.save(new Role(Roles.ADMIN.getDescription())));
         } else {
