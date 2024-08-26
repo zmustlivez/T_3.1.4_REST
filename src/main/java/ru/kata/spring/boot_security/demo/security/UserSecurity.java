@@ -1,7 +1,12 @@
 package ru.kata.spring.boot_security.demo.security;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.model.User;
 
 import java.util.Collection;
@@ -13,11 +18,13 @@ public class UserSecurity implements UserDetails {//proxy User
         this.user = user;
     }
 
-    @Override
+
+//@Fetch(FetchMode.JOIN)
 
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return user.getRoles().stream().map(e -> new RoleSecurity(e))
                 .collect(Collectors.toList());
+        //TODO вместо new RoleSecurity можно использовать SimpleGrantedAuthority(e.getRolename)
     }
 
     @Override

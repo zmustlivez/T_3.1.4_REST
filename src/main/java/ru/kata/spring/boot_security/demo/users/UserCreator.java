@@ -37,10 +37,11 @@ public class UserCreator {
                 "admin123A",
                 "Creator",
                 role);
-/*        if (!userService.getUsers().contains(admin)) {
+        if (!userService.getUsers().contains(admin)) {
             userService.addUser(admin);
-        }*/
-        userService.addUser(admin);
+        }
+
+//        userService.addUser(admin);
     }
 
 }
