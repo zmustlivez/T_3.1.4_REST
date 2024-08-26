@@ -22,7 +22,6 @@ public class User {
 
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-
     private List<Role> roles = new ArrayList<>();
 
     public User() {

@@ -1,23 +1,28 @@
 package ru.kata.spring.boot_security.demo.controller;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repository.RoleRepository;
 import ru.kata.spring.boot_security.demo.service.UserService;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
     private final UserService userService;
     private final RoleRepository roleRepository;
-
-public AdminController(@Qualifier ("userServiceImplRepo") UserService userService, RoleRepository roleRepository) {
+    private final PasswordEncoder passwordEncoder;
+    public AdminController(@Qualifier("userServiceImplRepo") UserService userService, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping
@@ -67,15 +72,27 @@ public AdminController(@Qualifier ("userServiceImplRepo") UserService userServic
     @GetMapping("/getInfo")
     public String getUserByName(@RequestParam("name") String name, Model model) {
         model.addAttribute("user", userService.loadUserByUsername(name));
+        model.addAttribute("rolesList", roleRepository.findAll());
         model.addAttribute("highLev", true);
         return "user-page";
     }
 
     @PostMapping("/update")
-    public String updateUser(@RequestParam("password") String password, @ModelAttribute("user") User user) {
+    public String updateUser(@RequestParam("nameOfOwner") String nameOfOwner,//@RequestParam("password") String password,
+                             //@ModelAttribute("user") List<Role> roles,
+                             @ModelAttribute("user") User user) {
         if (user != null) {
             User existingUser = userService.loadUserByUsername(user.getUsername());
-            existingUser.setPassword(password);
+            if (!user.getPassword().isEmpty()) {
+                existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
+            }
+            if(!nameOfOwner.isEmpty()){
+                existingUser.setNameowner(nameOfOwner); //using @Requestparam because in user-page name of files nameOfOwner != nameowner
+            }
+            if(!user.getRoles().isEmpty()&!user.getRoles().equals(existingUser.getRoles())){
+                existingUser.setRoles(user.getRoles());
+            }
+
             userService.updateUser(existingUser);
             return "redirect:/admin/getInfo?name=" + existingUser.getUsername();
         } else {

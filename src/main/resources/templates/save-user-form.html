@@ -18,8 +18,8 @@
     <input id="nameowner" type="text" th:field="*{nameowner}" placeholder="Enter nameowner"/>
 
     <label for="roles">Please select role</label>
-    <select id="roles" th:field="*{roles}">
-        <option value="" disabled selected>Select a role</option>
+    <select id="roles" th:field="*{roles}" multiple>
+        <option value="" disabled selected>Select a role/few roles (ctrl+role)</option>
         <option th:each="role : ${rolesList}"
                 th:value="${role.getId()}"
                 th:text="${role.getRolename()}">Role</option>
@@ -30,8 +30,12 @@
     <div th:if="${errorMessage}">
         <p th:text="${errorMessage}" style="color: red;"></p>
     </div>
-    <p><a th:href="@{/admin}">Перейти к таблице с пользователями</a></p>
 </form>
+<br>
+<form th:action="@{/admin}" method="get">
+    <button type="submit">Перейти к таблице с пользователями</button>
+</form>
+<br>
 <form th:action="@{/logout}" method="post">
     <button type="submit">Logout</button>
 </form>

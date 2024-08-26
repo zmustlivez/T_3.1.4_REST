@@ -4,9 +4,31 @@
 <head>
     <meta charset="UTF-8">
     <title>T_2.3.1</title>
+    <!-- <style>
+         table {
+             width: 50%;
+             border-collapse: collapse;
+             table-layout: fixed;
+         }
+
+         th, td {
+             border: 1px solid black;
+             padding: 8px;
+             text-align: center;
+             overflow: hidden;
+             text-overflow: ellipsis;
+         }
+
+         th {
+             background-color: #f2f2f2;
+         }
+         th, td {
+             width: 33%;
+         }
+     </style>-->
     <style>
         table {
-            width: 50%;
+            width: 70%;
             border-collapse: collapse;
             table-layout: fixed;
         }
@@ -22,10 +44,21 @@
         th {
             background-color: #f2f2f2;
         }
-        th, td {
-            width: 33%;
+
+        /* Задаем ширину столбцов */
+        th:nth-child(1), td:nth-child(1) {
+            width: 15%; /* Первый столбец */
+        }
+
+        th:nth-child(2), td:nth-child(2) {
+            width: auto; /* Второй столбец (password) подстраивается под содержимое  */
+        }
+
+        th:nth-child(3), td:nth-child(3) {
+            width: 15%; /* Третий столбец */
         }
     </style>
+
 </head>
 
 <body>
@@ -34,12 +67,22 @@
     <tr>
         <th>Username</th>
         <th>Password</th>
+        <th>Owner name</th>
+        <th>Roles</th>
     </tr>
     </thead>
     <tbody>
 
     <td th:text="${user.getUsername()}">username</td>
     <td th:text="${user.getPassword()}">password</td>
+    <td th:text="${user.getNameowner()}">nameowner</td>
+    <td>
+    <span th:each="role, iterStat : ${user.getRoles()}"
+          th:text="${role.getRolename()} + ${!iterStat.last ? ', ' : ''}">
+    </span>
+    </td>
+
+<!--    <td th:text="${user.getRoles()}">roles</td>-->
 
 
     </td>
@@ -51,11 +94,25 @@
 
     <input type="hidden" name="username" th:field="${user.username}"/>
     <input type="text" id="password" name="password" placeholder="Enter NEW password"/>
-    </div>
-    <button type="submit" >Setup new password</button>
-    <p><a th:href="@{/admin}">Перейти к таблице с пользователями</a></p>
 
+    <button type="submit" style="margin-right: 20px">Setup new password</button>
+    <input type="text" id="nameowner" name="nameOfOwner" placeholder="Enter NEW owner name"/>
+    <button type="submit" style="margin-right: 20px">Setup new owner name</button>
+
+    <label for="roles" >Please select role</label>
+    <select id="roles" name ="newRoles" th:field="*{roles}" multiple>
+        <option value="" disabled selected>Select a role/few roles (ctrl+role)</option>
+        <option th:each="role : ${rolesList}"
+                th:value="${role.getId()}"
+                th:text="${role.getRolename()}">Role</option>
+    </select>
+    <input type="submit" value="Change roles"/>
 </form>
+<br>
+<form th:action="@{/admin}" method="get">
+    <button type="submit">Перейти к таблице с пользователями</button>
+</form>
+<br>
 <form th:action="@{/logout}" method="post">
     <button type="submit">Logout</button>
 </form>
