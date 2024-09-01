@@ -3,8 +3,10 @@ package ru.kata.spring.boot_security.demo.controller;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.service.UserService;
 import org.springframework.stereotype.Controller;
+import ru.kata.spring.boot_security.demo.users.Roles;
 
 import java.security.Principal;
 
@@ -20,7 +22,10 @@ public class UserController {
 
     @GetMapping//    @PreAuthorize("hasRole('USER')")
     public String getUserPage(Model model, Principal principal) {
-        model.addAttribute("user", userService.loadUserByUsername(principal.getName()));
-        return "user-page";
+        boolean highLev = userService.loadUserByUsername(principal.getName()).getRoles().stream()
+                .anyMatch(role -> role.getRolename().equals(Roles.ADMIN.getDescription()));
+        model.addAttribute("highLev", highLev);
+        model.addAttribute("thisUser", userService.loadUserByUsername(principal.getName()));
+        return "user";
     }
 }

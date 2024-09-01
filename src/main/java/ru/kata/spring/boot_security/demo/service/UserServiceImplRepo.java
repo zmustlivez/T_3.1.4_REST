@@ -34,6 +34,7 @@ public class UserServiceImplRepo implements UserService {//, UserDetailsService 
     @Transactional(readOnly = true)
     public User loadUserByUsername(String name) {
         return userRepository.findByUsername(name);
+
     }
 
     @Override

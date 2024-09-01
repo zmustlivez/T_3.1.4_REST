@@ -28,11 +28,13 @@ public class User {
     }
 
     public User(String username, String password, String nameowner, Role role) {
+
         this.username = username;
         this.password = password;
         this.nameowner = nameowner;
         this.roles.add(role);
     }
+
 
     public Long getId() {
         return id;
@@ -46,6 +48,10 @@ public class User {
         return roles;
     }
 
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
+
     public String getNameowner() {
         return nameowner;
     }
@@ -54,9 +60,6 @@ public class User {
         this.nameowner = nameowner;
     }
 
-    public void setRoles(List<Role> roles) {
-        this.roles = roles;
-    }
 
     public String getPassword() {
         return password;
@@ -70,7 +73,6 @@ public class User {
         return username;
     }
 
-
     public void setUsername(String username) {
         this.username = username;
     }
@@ -80,19 +82,22 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(username, user.username) && Objects.equals(password, user.password) && Objects.equals(roles, user.roles);
+        return Objects.equals(id, user.id) && Objects.equals(username, user.username) && Objects.equals(password, user.password) && Objects.equals(nameowner, user.nameowner) && Objects.equals(roles, user.roles);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(username, password, roles);
+        return Objects.hash(id, username, password, nameowner, roles);
     }
 
     @Override
     public String toString() {
         return "User{" +
+                "id=" + id +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
+                ", nameowner='" + nameowner + '\'' +
+                ", roles=" + roles +
                 '}';
     }
 }

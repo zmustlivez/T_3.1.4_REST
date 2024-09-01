@@ -22,25 +22,33 @@ public class UserCreator {
 
     @PostConstruct
     private void postConstruct() {
-        Optional<Role> existingRole = roleRepository.findByRolename(Roles.ADMIN.getDescription());
+/*        Optional<Role> existingRole = roleRepository.findByRolename(Roles.ADMIN.getDescription());
 
         Optional<Role> adminRole;
         if (existingRole.isEmpty()) {
             adminRole = Optional.of(roleRepository.save(new Role(Roles.ADMIN.getDescription())));
         } else {
             adminRole = existingRole;
-        }
+        }*/
 
-        Role role = adminRole.orElse(null);
+        Role role = roleRepository.findByRolename(Roles.ADMIN.getDescription()).orElse(null);
         User admin = new User(
-                "admin",
+                "admin@mail.ru",
                 "admin123A",
                 "Creator",
                 role);
         if (!userService.getUsers().contains(admin)) {
             userService.addUser(admin);
         }
-
+        role=roleRepository.findByRolename(Roles.USER.getDescription()).orElse(null);
+        User user = new User(
+                "user@mail.ru",
+                "1234",
+                "Creator",
+                role);
+        if (!userService.getUsers().contains(user)) {
+            userService.addUser(user);
+        }
 //        userService.addUser(admin);
     }
 
