@@ -20,7 +20,7 @@ public class AdminController {
     private final UserService userService;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
-    List<Role> thisUserRoles;
+
 
     public AdminController(@Qualifier("userServiceImplRepo") UserService userService, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         this.userService = userService;
@@ -29,13 +29,9 @@ public class AdminController {
     }
 
 
-
     @GetMapping
     public String getUsers(Model model, Principal principal) {
-/*        if (model.containsAttribute("searchedUser")) {
-            model.addAttribute("showSearchResult", true);
-        }*/
-        thisUserRoles = userService.loadUserByUsername(principal.getName()).getRoles();
+        List<Role> thisUserRoles = userService.loadUserByUsername(principal.getName()).getRoles();
         model.addAttribute("usersList", userService.getUsers());
         model.addAttribute("loginRoles", thisUserRoles);
         model.addAttribute("rolesList", roleRepository.findAll());
@@ -48,14 +44,8 @@ public class AdminController {
         return "admin";
     }
 
-    @GetMapping("/add")
-    public String showAddUserForm(@ModelAttribute("user") User user, Model model) {
-        model.addAttribute("rolesList", roleRepository.findAll());
-        return "save-user-form";
-    }
-
     @PostMapping("/save")
-    public String addUser(@ModelAttribute("user") User user, Model model, Principal principal, @RequestParam(name = "activeTab", required = false) String activeTab) {
+    public String addUser(@ModelAttribute("user") User user) {
         userService.addUser(user);
         return "redirect:/admin";//TODO поправить сервис и repo (убрать возврат boolean)
     }
@@ -77,18 +67,8 @@ public class AdminController {
         return "user-not-found";
     }
 
-    @GetMapping("/getInfo")
-    public String getUserByName(@RequestParam("name") String name, Model model) {
-        model.addAttribute("user", userService.loadUserByUsername(name));
-//        model.addAttribute("rolesList", roleRepository.findAll());
-//        model.addAttribute("highLev", true);
-        return "user-page";
-    }
-
     @PostMapping("/update")
-    public String updateUser(//@RequestParam("nameOfOwner") String nameOfOwner,//@RequestParam("password") String password,
-                             //@ModelAttribute("user") List<Role> roles,
-                             @ModelAttribute("userForm") User user) {
+    public String updateUser(@ModelAttribute("userForm") User user) {
         if (user != null) {
             User existingUser = userService.loadUserByUsername(user.getUsername());
             System.out.println(existingUser);
@@ -104,7 +84,6 @@ public class AdminController {
 
             userService.updateUser(existingUser);
             return "redirect:/admin";
-//                    :/admin/getInfo?name=" + existingUser.getUsername();
         } else {
             return "user-not-found";
         }

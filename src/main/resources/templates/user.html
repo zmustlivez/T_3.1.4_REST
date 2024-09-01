@@ -35,7 +35,6 @@
             <div class="position-sticky pt-3">
                 <ul class="nav flex-column">
                     <li class="nav-item" th:if="${highLev}">
-<!--                    <li class="nav-item">-->
                         <a class="nav-link active" th:href="@{/admin}">
                             Admin
                         </a>
@@ -76,12 +75,9 @@
                             <td th:text="${thisUser.getPassword()}"></td>
                             <td th:text="${thisUser.getNameowner()}"></td>
                             <td>
-                                            <span th:each="role, iterStat : ${thisUser.getRoles()}"
-                                                  th:text="${role.getRolename().substring(role.getRolename().lastIndexOf('_')+1, role.getRolename().length())} + ${!iterStat.last ? ', ' : ''}">
-                </span>
-<!--                                    <span th:each="role, iterStat : ${thisUser.getRoles()}"
-                                          th:text="${role.getRolename().substring(role.getRolename().lastIndexOf('_')+1, role.getRolename().length())} + ${!iterStat.last ? ', ' : ''}">
-                                    </span>-->
+                                <span th:each="role, iterStat : ${thisUser.getRoles()}"
+                                      th:text="${role.getRolename().substring(role.getRolename().lastIndexOf('_')+1, role.getRolename().length())} + ${!iterStat.last ? ', ' : ''}">
+                                </span>
                             </td>
                         </tr>
                         </tbody>
