@@ -7,7 +7,7 @@ import java.util.List;
 
 @Transactional
 public interface UserService {
-    boolean addUser(User user);
+    void addUser(User user);
 
     User loadUserByUsername(String name);
 

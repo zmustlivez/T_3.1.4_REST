@@ -9,7 +9,7 @@ import ru.kata.spring.boot_security.demo.repository.UserRepository;
 import java.util.List;
 
 @Service
-public class UserServiceImplRepo implements UserService {//, UserDetailsService {
+public class UserServiceImplRepo implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
@@ -20,13 +20,10 @@ public class UserServiceImplRepo implements UserService {//, UserDetailsService 
 
     @Override
     @Transactional
-    public boolean addUser(User user) {
-        if (loadUserByUsername(user.getUsername()) == null) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            userRepository.save(user);
-            return true;
-        }
-        return false;
+    public void addUser(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
+
     }
 
 
