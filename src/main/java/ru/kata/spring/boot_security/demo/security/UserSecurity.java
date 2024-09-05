@@ -6,15 +6,12 @@ import ru.kata.spring.boot_security.demo.model.User;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
-public class UserSecurity implements UserDetails {//proxy User
+public class UserSecurity implements UserDetails {
     private final User user;
 
     public UserSecurity(User user) {
         this.user = user;
     }
-
-
-//@Fetch(FetchMode.JOIN)
 
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return user.getRoles().stream().map(e -> new RoleSecurity(e))

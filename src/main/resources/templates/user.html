@@ -77,16 +77,15 @@
 </div>
 
 <script>
-    // Fetching user information from the server
+
     function loadUserInfo() {
         fetch('/api/v1/user/principal')
             .then(response => response.json())
             .then(data => {
-                console.log("THIS IS DATA USERNAME and ROLES " +data.username + data.roles.join(', '));
-                // Display username and roles in the navbar
+                console.log("THIS IS DATA USERNAME and ROLES " + data.username + data.roles.join(', '));
+
                 document.getElementById('username-display').textContent = `${data.username} with roles: ${data.roles.map(role => role.rolename.substring(role.rolename.lastIndexOf('_') + 1)).join(', ')}`;
 
-                // Fill table with user info
                 document.getElementById('user-id').textContent = data.id;
                 document.getElementById('user-username').textContent = data.username;
                 document.getElementById('user-password').textContent = data.password;
@@ -103,17 +102,15 @@
             .catch(error => console.error('Error fetching user data:', error));
     }
 
-    // Event listener for logout
     document.getElementById('logout-form').addEventListener('submit', function (event) {
         event.preventDefault();
-        fetch('/logout', { method: 'POST' })
+        fetch('/logout', {method: 'POST'})
             .then(() => {
-                window.location.href = '/login';  // Redirect to login page after logout
+                window.location.href = '/login';
             })
             .catch(error => console.error('Error logging out:', error));
     });
 
-    // Load user information when the page loads
     window.onload = loadUserInfo;
 </script>
 

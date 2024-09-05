@@ -21,7 +21,6 @@ public class UserRESTController {
         this.userService = userService;
     }
 
-
     @GetMapping("/principal")
     public User getPrincipal() {
         return userService.loadUserByUsername(((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername());

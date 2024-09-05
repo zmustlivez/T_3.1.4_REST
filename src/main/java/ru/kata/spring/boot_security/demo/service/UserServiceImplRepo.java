@@ -30,21 +30,16 @@ public class UserServiceImplRepo implements UserService {
     @Transactional
     public User addUser(User user) {
         List<Role> rolesList = roleRepository.findAll();
-        Set<Role> userRoles = new HashSet<>(); // Используем Set, чтобы избежать дубликатов
+        Set<Role> userRoles = new HashSet<>();
 
         for (Role role : user.getRoles()) {
-            // Проверяем, существует ли роль в списке rolesList
             Role existingRole = rolesList.stream()
                     .filter(r -> r.getRolename().equals(role.getRolename()))
                     .findFirst()
                     .orElse(null);
-
             if (existingRole == null) {
-                // Если роли нет в списке, сохраняем новую роль
                 existingRole = roleRepository.save(role);
             }
-
-            // Добавляем роль к набору ролей пользователя
             userRoles.add(existingRole);
         }
 
@@ -61,23 +56,20 @@ public class UserServiceImplRepo implements UserService {
     @Transactional(readOnly = true)
     public User loadUserByUsername(String name) {
         return userRepository.findByUsername(name);
-
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<User> getUsers() {
         return userRepository.findAll();
-
     }
 
     @Override
     @Transactional
     public User updateUser(String username, User user) {
-        User existingUser= userRepository.findByUsername(username);
+        User existingUser = userRepository.findByUsername(username);
         System.out.println(user);
         if (user != null) {
-//            existingUser = userRepository.findByUsername(username);
             if (!user.getPassword().isEmpty()) {
                 existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
             }

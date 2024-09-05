@@ -11,5 +11,4 @@ public class RootController {
     public String redirectToLogin() {
         return "redirect:/login";
     }
-
 }

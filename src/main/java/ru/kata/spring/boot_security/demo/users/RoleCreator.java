@@ -10,12 +10,14 @@ import java.util.Arrays;
 @Component
 public class RoleCreator {
     private final RoleRepository roleRepository;
+
     public RoleCreator(RoleRepository roleRepository) {
         this.roleRepository = roleRepository;
     }
+
     @PostConstruct
     public void createRole() {
-        Arrays.stream(Roles.values()).forEach(e-> {
+        Arrays.stream(Roles.values()).forEach(e -> {
             Role role = new Role();
             role.setRolename(e.getDescription());
             roleRepository.save(role);

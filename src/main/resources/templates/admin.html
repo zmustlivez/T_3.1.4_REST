@@ -85,7 +85,6 @@
                                     </tr>
                                     </thead>
                                     <tbody id="users-table">
-                                    <!-- Users will be dynamically populated here -->
                                     </tbody>
                                 </table>
                             </div>
@@ -113,7 +112,6 @@
                                     <div class="form-group">
                                         <label for="new-roles">Select a role/few roles (ctrl+role)</label>
                                         <select class="form-control dynamic-height" id="new-roles" multiple>
-                                            <!-- Roles will be dynamically populated here -->
                                         </select>
                                     </div>
                                     <button type="submit" class="btn btn-primary mt-3">Add</button>
@@ -197,7 +195,8 @@
                         </select>
                     </div>
 
-                    <p>Are you sure you want to delete user <strong><span id="delete-user-username"></span></strong>?</p>
+                    <p>Are you sure you want to delete user <strong><span id="delete-user-username"></span></strong>?
+                    </p>
                 </form>
             </div>
             <div class="modal-footer">
@@ -214,7 +213,6 @@
 <script>
 
     document.addEventListener('DOMContentLoaded', () => {
-        // Load logged-in user's information
 
         fetch('/api/v1/admin/principal')
             .then(response => response.json())
@@ -225,7 +223,6 @@
             .catch(error => console.error('Error fetching principal:', error));
 
 
-        // Load users
         function loadUsers() {
             fetch('/api/v1/admin')
                 .then(response => response.json())
@@ -249,7 +246,6 @@
                 .catch(error => console.error('Error loading users:', error));
         }
 
-        // Load roles for new user form
         function loadRoles() {
             fetch('/api/v1/admin/roles')
                 .then(response => response.json())
@@ -269,26 +265,18 @@
                 .catch(error => console.error('Error loading roles:', error));
         }
 
-        // Обработка отправки формы добавления нового пользователя
-
         document.getElementById('add-user-form').addEventListener('submit', function (event) {
             event.preventDefault();
 
-            // Собираем данные нового пользователя
             const newUser = {
                 username: document.getElementById('new-username').value,
                 password: document.getElementById('new-password').value,
                 nameowner: document.getElementById('new-nameowner').value,
-                // Формируем массив объектов ролей
-                /*               roles: Array.from(document.getElementById('new-roles').selectedOptions).map(option => ({
-                                   id: option.value
-                               }))*/
                 roles: Array.from(document.getElementById('new-roles').selectedOptions).map(option => ({
                     rolename: option.textContent
                 }))
             };
 
-            // Отправляем POST-запрос на сервер
             fetch('/api/v1/admin/save', {
                 method: 'POST',
                 headers: {
@@ -298,7 +286,6 @@
             })
                 .then(response => response.json())
                 .then(() => {
-                    // Обновляем список пользователей и сбрасываем форму
                     loadUsers();
                     document.getElementById('add-user-form').reset();
                 })
@@ -306,7 +293,6 @@
         });
 
 
-        // Handle search
         document.getElementById('search-form').addEventListener('submit', function (event) {
             event.preventDefault();
             const username = document.getElementById('search-username').value;
@@ -332,15 +318,10 @@
                 .catch(error => console.error('Error searching user:', error));
         });
 
-        // Обработка модального окна открытия/редактирования
-
-
-// Обработка нажатия на кнопку редактирования пользователя
         document.addEventListener('click', function (event) {
             if (event.target.classList.contains('open-modal')) {
                 const username = event.target.getAttribute('data-username');
 
-                // Получаем информацию о пользователе
                 fetch(`/api/v1/admin/${username}`)
                     .then(response => response.json())
                     .then(user => {
@@ -349,20 +330,17 @@
                         document.getElementById('modal-password').value = user.password;
                         document.getElementById('modal-nameowner').value = user.nameowner;
 
-                        // Загружаем все доступные роли
                         fetch('/api/v1/admin/roles')
                             .then(response => response.json())
                             .then(allRoles => {
                                 const modalRoles = document.getElementById('modal-roles');
                                 modalRoles.innerHTML = '';
 
-                                // Отображаем все роли и отмечаем выбранные пользователем
                                 allRoles.forEach(role => {
                                     const option = document.createElement('option');
                                     option.value = role.id;
                                     option.textContent = role.rolename;
 
-                                    // Отмечаем роли, которые уже назначены пользователю
                                     if (user.roles.some(userRole => userRole.id === role.id)) {
                                         option.selected = true;
                                     }
@@ -370,7 +348,6 @@
                                     modalRoles.appendChild(option);
                                 });
 
-                                // Показываем модальное окно
                                 const editModal = new bootstrap.Modal(document.getElementById('editUserModal'));
                                 editModal.show();
                             })
@@ -380,7 +357,6 @@
             }
         });
 
-// Обработка сохранения изменений в модальном окне редактирования
         document.getElementById('edit-user-form').addEventListener('submit', function (event) {
             event.preventDefault();
 
@@ -403,22 +379,14 @@
             })
                 .then(response => {
                     if (response.ok) {
-                        loadUsers(); // Обновление списка пользователей после изменения
-                        const editModal = bootstrap.Modal.getInstance(document.getElementById('editUserModal')); // Получаем текущее модальное окно
-                        editModal.hide(); // Закрываем модальное окно
+                        loadUsers();
+                        const editModal = bootstrap.Modal.getInstance(document.getElementById('editUserModal'));
+                        editModal.hide();
                     }
                 })
                 .catch(error => console.error('Error updating user:', error));
         });
 
-
-
-
-
-
-
-
-        // Handle delete modal
 
         document.addEventListener('click', function (event) {
             if (event.target.classList.contains('open-delete-modal')) {
@@ -426,16 +394,14 @@
                 fetch(`/api/v1/admin/${username}`)
                     .then(response => response.json())
                     .then(user => {
-                        // Заполняем форму данными пользователя
                         document.getElementById('deleteUserId').value = user.id;
                         document.getElementById('deleteUsername').value = user.username;
                         document.getElementById('deleteNameowner').value = user.nameowner;
                         document.getElementById('delete-username').value = user.username;
                         document.getElementById('delete-user-username').textContent = user.username;
 
-                        // Заполняем список ролей
                         const deleteRoles = document.getElementById('deleteRoles');
-                        deleteRoles.innerHTML = ''; // Очищаем предыдущие значения
+                        deleteRoles.innerHTML = '';
                         user.roles.forEach(role => {
                             const option = document.createElement('option');
                             option.value = role.id;
@@ -444,7 +410,6 @@
                             deleteRoles.appendChild(option);
                         });
 
-                        // Показываем модальное окно
                         const deleteModal = new bootstrap.Modal(document.getElementById('deleteUserModal'));
                         deleteModal.show();
                     })
@@ -452,7 +417,6 @@
             }
         });
 
-// Handle confirm delete
         document.getElementById('confirm-delete').addEventListener('click', function () {
             const username = document.getElementById('delete-username').value;
             fetch(`/api/v1/admin/delete?username=${encodeURIComponent(username)}`, {
@@ -460,34 +424,32 @@
             })
                 .then(response => {
                     if (response.ok) {
-                        loadUsers(); // Обновляем список пользователей
-                        const deleteModal = bootstrap.Modal.getInstance(document.getElementById('deleteUserModal')); // Получаем существующее модальное окно
-                        deleteModal.hide(); // Закрываем модальное окно
+                        loadUsers();
+                        const deleteModal = bootstrap.Modal.getInstance(document.getElementById('deleteUserModal'));
+                        deleteModal.hide();
                     }
                 })
                 .catch(error => console.error('Error deleting user:', error));
         });
 
 
-        document.getElementById('logout-form').addEventListener('submit', function(event) {
-            event.preventDefault();  // Остановить стандартное поведение
+        document.getElementById('logout-form').addEventListener('submit', function (event) {
+            event.preventDefault();
 
             fetch('/logout', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
-                    // 'X-CSRF-TOKEN': document.querySelector('input[name="_csrf"]').value // если нужен CSRF-токен
                 }
             }).then(response => {
                 if (response.ok) {
-                    window.location.href = '/login?logout';  // Перенаправление после логаута
+                    window.location.href = '/login?logout';
                 } else {
                     console.error('Logout failed');
                 }
             }).catch(error => console.error('Error:', error));
         });
 
-        // Initial data load
         loadUsers();
         loadRoles();
     });

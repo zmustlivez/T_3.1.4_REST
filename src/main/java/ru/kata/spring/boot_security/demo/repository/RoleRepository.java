@@ -8,6 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface RoleRepository extends JpaRepository<Role, Long> {
-//    @Query("select distinct roles from Role r join fetch u.user")
     Optional<Role> findByRolename(String rolename);
 }
