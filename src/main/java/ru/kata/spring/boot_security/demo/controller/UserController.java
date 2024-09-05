@@ -13,18 +13,9 @@ import java.security.Principal;
 @Controller
 @RequestMapping("/user")
 public class UserController {
-    private final UserService userService;
 
-    public UserController(@Qualifier("userServiceImplRepo") UserService userService) {
-        this.userService = userService;
-    }
-
-    @GetMapping//    @PreAuthorize("hasRole('USER')")
-    public String getUserPage(Model model, Principal principal) {
-        boolean highLev = userService.loadUserByUsername(principal.getName()).getRoles().stream()
-                .anyMatch(role -> role.getRolename().equals(Roles.ADMIN.getDescription()));
-        model.addAttribute("highLev", highLev);
-        model.addAttribute("thisUser", userService.loadUserByUsername(principal.getName()));
+    @GetMapping
+    public String getUserPage() {
         return "user";
     }
 }

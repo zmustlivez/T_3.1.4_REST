@@ -1,7 +1,12 @@
 package ru.kata.spring.boot_security.demo.model;
 
 
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -9,7 +14,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,8 +25,9 @@ public class User {
     @Column(name = "nameowner", nullable = false)
     private String nameowner;
 
-
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @JsonIgnore
+    @JsonManagedReference
     private List<Role> roles = new ArrayList<>();
 
     public User() {

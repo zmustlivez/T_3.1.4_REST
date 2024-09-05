@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -14,35 +14,28 @@
 <body>
 <nav class="navbar navbar-light bg-light p-3">
     <div class="d-flex col-12 col-md-3 col-lg-2 mb-2 mb-lg-0 flex-wrap flex-md-nowrap justify-content-between">
-        <h5><span th:text="${thisUser.getUsername()}"></span> with roles:
-            <span th:each="role, iterStat : ${thisUser.getRoles()}"
-                  th:text="${role.getRolename().substring(role.getRolename().lastIndexOf('_')+1, role.getRolename().length())} + ${!iterStat.last ? ', ' : ''}">
-                </span>
-        </h5>
+        <h5 id="username-display">User with roles:</h5>
         <button class="navbar-toggler d-md-none collapsed mb-3" type="button" data-bs-toggle="collapse"
                 data-bs-target="#sidebar" aria-controls="sidebar" aria-expanded="false"
                 aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
     </div>
-    <form th:action="@{/logout}" method="post">
+    <form id="logout-form">
         <button class="btn-secondary btn-rounded" type="submit">Logout</button>
     </form>
 </nav>
+
 <div class="container-fluid">
     <div class="row">
         <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
             <div class="position-sticky pt-3">
                 <ul class="nav flex-column">
-                    <li class="nav-item" th:if="${highLev}">
-                        <a class="nav-link active" th:href="@{/admin}">
-                            Admin
-                        </a>
+                    <li class="nav-item" id="admin-link">
+                        <a class="nav-link active" href="/admin">Admin</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/user}">
-                            User
-                        </a>
+                        <a class="nav-link" href="/user">User</a>
                     </li>
                 </ul>
             </div>
@@ -69,15 +62,11 @@
                         </thead>
                         <tbody>
                         <tr>
-                            <td th:text="${thisUser.getId()}"></td>
-                            <td th:text="${thisUser.getUsername()}"></td>
-                            <td th:text="${thisUser.getPassword()}"></td>
-                            <td th:text="${thisUser.getNameowner()}"></td>
-                            <td>
-                                <span th:each="role, iterStat : ${thisUser.getRoles()}"
-                                      th:text="${role.getRolename().substring(role.getRolename().lastIndexOf('_')+1, role.getRolename().length())} + ${!iterStat.last ? ', ' : ''}">
-                                </span>
-                            </td>
+                            <td id="user-id"></td>
+                            <td id="user-username"></td>
+                            <td id="user-password"></td>
+                            <td id="user-nameowner"></td>
+                            <td id="user-roles"></td>
                         </tr>
                         </tbody>
                     </table>
@@ -86,5 +75,47 @@
         </main>
     </div>
 </div>
+
+<script>
+    // Fetching user information from the server
+    function loadUserInfo() {
+        fetch('/api/v1/user/principal')
+            .then(response => response.json())
+            .then(data => {
+                console.log("THIS IS DATA USERNAME and ROLES " +data.username + data.roles.join(', '));
+                // Display username and roles in the navbar
+                document.getElementById('username-display').textContent = `${data.username} with roles: ${data.roles.map(role => role.rolename.substring(role.rolename.lastIndexOf('_') + 1)).join(', ')}`;
+
+                // Fill table with user info
+                document.getElementById('user-id').textContent = data.id;
+                document.getElementById('user-username').textContent = data.username;
+                document.getElementById('user-password').textContent = data.password;
+                document.getElementById('user-nameowner').textContent = data.nameowner;
+                document.getElementById('user-roles').textContent = data.roles.map(role => role.rolename).join(', ');
+
+                const adminLink = document.getElementById('admin-link');
+                const hasAdminRole = data.roles.some(role => role.rolename === 'ROLE_ADMIN');
+                if (!hasAdminRole) {
+                    adminLink.style.display = 'none';
+                }
+
+            })
+            .catch(error => console.error('Error fetching user data:', error));
+    }
+
+    // Event listener for logout
+    document.getElementById('logout-form').addEventListener('submit', function (event) {
+        event.preventDefault();
+        fetch('/logout', { method: 'POST' })
+            .then(() => {
+                window.location.href = '/login';  // Redirect to login page after logout
+            })
+            .catch(error => console.error('Error logging out:', error));
+    });
+
+    // Load user information when the page loads
+    window.onload = loadUserInfo;
+</script>
+
 </body>
 </html>

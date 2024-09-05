@@ -26,7 +26,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if ((user = userRepository.findByUsername(username)) == null) {
             throw new UsernameNotFoundException(String.format("User %s not found", username));
         }
-        Hibernate.initialize(user.getRoles());
+//        Hibernate.initialize(user.getRoles());
         return new UserSecurity(user);
     }
 }
